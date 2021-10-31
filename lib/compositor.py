@@ -51,6 +51,8 @@ def MergeDataframesByColumns(dfONE, dfTWO, colONE, colTWO):
             unmergedDF = unmergedDF.append(newSeries, ignore_index=True)
 
     mergedDF.columns = columns
+    unmergedDF.columns = columns
+    
     return {
         "merged":mergedDF,
         "unmerged":unmergedDF

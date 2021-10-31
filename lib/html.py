@@ -2,8 +2,8 @@ import webbrowser
 from IPython.display import display
 import os
 
-def HTMLRender(target,*kwargs):
-    name = None
+def HTMLRender(target,*args,**kwargs):
+    name = kwargs.get('name', None)
     html = None
     filePath = None
     path = None
@@ -16,10 +16,8 @@ def HTMLRender(target,*kwargs):
     html = target.to_html()
     
     # get filename (if supplied) or set unnamed
-    if hasattr(target, 'fileName'):
+    if not name and hasattr(target, 'fileName'):
         name = target.fileName
-    else: 
-        name = "Unnamed"
 
     # set output html file destination and write to
     filePath = './html/'+name+'.html'
