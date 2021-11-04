@@ -1,8 +1,8 @@
-from numpy import number
 import pandas as pd
 from pandas.core.frame import DataFrame
-import numpy as np
-from pandas.core.reshape.merge import merge
+from typing import List
+from lib.print import Error
+from lib.progress import Bar
 
 def MergeDataframesByColumns(dfONE, dfTWO, colONE, colTWO):
 
@@ -24,7 +24,7 @@ def MergeDataframesByColumns(dfONE, dfTWO, colONE, colTWO):
     mergedDF = DataFrame()
     unmergedDF = DataFrame()
 
-    for i,one in enumerate(dfONE[colONE].values):
+    for i,one in Bar(dfONE[colONE].values,"Merging dataframes"):
         one = [y.lower() for y in one]
         merged = False
         for j,two in enumerate(dfTWO[colTWO].values):
@@ -57,3 +57,12 @@ def MergeDataframesByColumns(dfONE, dfTWO, colONE, colTWO):
         "merged":mergedDF,
         "unmerged":unmergedDF
     }
+
+class Compositor:
+    def MergeWith(self,Handler,colONE:List[str],colTWO:List[str]):
+        if hasattr(Handler, 'dataframe'):
+            mergeOutcome = MergeDataframesByColumns(self.dataframe, Handler.dataframe, colONE, colTWO)
+            self.dataframe = mergeOutcome["merged"]
+            self.unmerged = mergeOutcome["unmerged"]
+        else:
+            Error("Handler does not contain dataframe")
